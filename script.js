@@ -1,101 +1,67 @@
-const cookieCountElement = document.getElementById('cookie-count')
-const getCookieButton = document.getElementById('get-cookie-button')
+// script.js
+const cookieCountElement =
+  document.getElementById('cookie-count')
 
-const cookiesPerClickElement = document.getElementById('cookies-per-click')
-const upgradeButton = document.getElementById('upgrade-button')
+const cookiesPerClickElement
+  = document.getElementById('cookies-per-click')
 
-const minersCountElement = document.getElementById('miners-count')
-const buyMinerButton = document.getElementById('buy-miner-button')
-
-const miningProgressBarElement = document.getElementById('mining-progress-bar')
-
-let cookieCount = 0;
-let cookiesPerClick = 1;
-let minersCount = 0;
-let miningProgress = 1000 / 10;
-
-getCookieButton.addEventListener('click', () => {
-  getCookie()
-})
-
-upgradeButton.addEventListener('click', () => {
-  upgrade()
-})
-
-buyMinerButton.addEventListener('click', () => {
-  buyMiner()
-})
-
-function render() {
-  cookieCountElement.innerHTML = cookieCount;
-  cookiesPerClickElement.innerHTML = cookiesPerClick;
-  minersCountElement.innerHTML = minersCount;
-}
+var cookieCount = 100;
+var upgradeCost = 5;
+var multiplier = 1;
 
 function getCookie() {
-  cookieCount += cookiesPerClick;
-  render()
+  cookieCount += multiplier;
+
+  cookieCountElement.innerHTML = cookieCount;
 }
 
 function upgrade() {
-  if (cookieCount < 5) {
-    return;
-  }
+  if (cookieCount >= upgradeCost) {
+    cookieCount -= upgradeCost;
+    multiplier += 1
 
-  cookieCount -= 5;
-  cookiesPerClick += 2;
-  render()
+    cookiesPerClickElement.innerHTML = multiplier;
+    cookieCountElement.innerHTML = cookieCount;
+  }
 }
+
+var minerCost = 60;
+var minerCount = 0;
+
+const minerCountElement
+  = document.getElementById('miners-count')
 
 function buyMiner() {
-  if (cookieCount < 25) {
-    return;
+  if (cookieCount >= minerCost) {
+    cookieCount -= minerCost;
+    minerCount++;
+
+    minerCost = minerCost * 1.5;
+
+    minerCountElement.innerHTML = minerCount;
+    cookieCountElement.innerHTML = cookieCount;
   }
-
-  cookieCount -= 25;
-  minersCount += 1;
-  render();
 }
 
-// function mineCookies() {
-//   setTimeout(() => {
-//     mineCookies()
-//   }, 1000)
-//
-//   if (minersCount < 1) {
-//     return;
-//   }
-//
-//   cookieCount += (minersCount * 5);
-//   render()
-// }
-//
-// mineCookies();
-
-function mineCookies() {
-  cookieCount += (minersCount * 5);
-  render()
-}
+var miningProgress = 0;
+const miningProgressBar = document.getElementById('mining-progress-bar')
 
 function update() {
   setTimeout(() => {
     update()
   }, 10)
 
-  if (minersCount < 1) {
-    return;
+  if (minerCount > 0) {
+    miningProgress++;
+    miningProgressBar.value = miningProgress;
+
+    if (miningProgress >= 100) {
+      miningProgress = 0;
+      cookieCount += (minerCount * multiplier);
+
+      cookieCountElement.innerHTML = cookieCount;
+    }
   }
-
-  miningProgress += 1;
-
-  if (miningProgress >= 100) {
-    mineCookies();
-    miningProgress = 0;
-  }
-
-  miningProgressBarElement.value = miningProgress;
 }
+update()
 
-update();
-
-render();
