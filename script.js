@@ -1,81 +1,42 @@
+// script.js
+
 const cookieCountElement = document.getElementById('cookie-count')
 const getCookieButton = document.getElementById('get-cookie-button')
-
-const cookiesPerClickElement = document.getElementById('cookies-per-click')
-const upgradeButton = document.getElementById('upgrade-button')
-
+const cookiesPerClick = document.getElementById('cookies-per-click')
 const minersCountElement = document.getElementById('miners-count')
-const buyMinerButton = document.getElementById('buy-miner-button')
 
-const miningProgressBarElement = document.getElementById('mining-progress-bar')
-
-let cookieCount = 0;
-let cookiesPerClick = 1;
-let minersCount = 0;
-let miningProgress = 1000 / 10;
+var cookieCount = 100;
+var addingCount = 1;
+var minersCount = 0;
 
 getCookieButton.addEventListener('click', () => {
-  getCookie()
+  cookieCount += addingCount;
+  render()
 })
 
-upgradeButton.addEventListener('click', () => {
-  upgrade()
-})
-
-buyMinerButton.addEventListener('click', () => {
-  buyMiner()
-})
+function upgrade() {
+  if (cookieCount >= 10) {
+    addingCount++;
+    cookieCount -= 10;
+    render()
+  }
+}
 
 function render() {
   cookieCountElement.innerHTML = cookieCount;
-  cookiesPerClickElement.innerHTML = cookiesPerClick;
+  cookiesPerClick.innerHTML = addingCount;
   minersCountElement.innerHTML = minersCount;
 }
 
-function getCookie() {
-  cookieCount += cookiesPerClick;
-  render()
-}
-
-function upgrade() {
-  if (cookieCount < 5) {
-    return;
-  }
-
-  cookieCount -= 5;
-  cookiesPerClick += 2;
-  render()
-}
-
 function buyMiner() {
-  if (cookieCount < 25) {
-    return;
+  if (cookieCount >= 100) {
+    minersCount++;
+    cookieCount -= 100;
+    render()
   }
-
-  cookieCount -= 25;
-  minersCount += 1;
-  render();
 }
 
-// function mineCookies() {
-//   setTimeout(() => {
-//     mineCookies()
-//   }, 1000)
-//
-//   if (minersCount < 1) {
-//     return;
-//   }
-//
-//   cookieCount += (minersCount * 5);
-//   render()
-// }
-//
-// mineCookies();
-
-function mineCookies() {
-  cookieCount += (minersCount * 5);
-  render()
-}
+var miningProgress = 0;
 
 function update() {
   setTimeout(() => {
@@ -86,16 +47,17 @@ function update() {
     return;
   }
 
-  miningProgress += 1;
+  miningProgress++;
 
   if (miningProgress >= 100) {
-    mineCookies();
+    cookieCount += (minersCount * addingCount)
     miningProgress = 0;
   }
 
-  miningProgressBarElement.value = miningProgress;
+  document.getElementById('mining-progress-bar').value
+    = miningProgress;
+
+  render();
 }
 
 update();
-
-render();
