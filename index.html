@@ -20,6 +20,13 @@
     <p>Cookies per click: <span id="cookies-per-click">1</span></p>
     <p>Miners: <span id="miners-count">0</span></p>
     <progress id="mining-progress-bar" max="100" value="0"></progress>
+    
+    <hr>
+    
+    <p>Total cookies mined: <span id="total-cookies-mined">0</span></p>
+    <p>Total cookies spent: <span id="total-cookies-spent">0</span></p>
+    
+    <hr>
   </section>
   <section>
     <button id="get-cookie-button" onclick="getCookie()">
@@ -30,6 +37,9 @@
     </button>
     <button id="buy-miner-button" onclick="buyMiner()">
       Buy Miner (Cost: <span id="miner-cost">25</span> cookies) !
+    </button>
+    <button id="reset-game-button" class="danger" onclick="resetGame()">
+      Reset Game !
     </button>
   </section>
 
